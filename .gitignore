@@ -1,0 +1,19 @@
+# Dependencies and build output
+node_modules/
+dist/
+
+# Python
+__pycache__/
+*.pyc
+
+# macOS
+.DS_Store
+
+# Never commit credentials. The Foundry token lives in ~/.foundry-token (chmod 600).
+*.token
+.foundry-token
+.env
+.env.*
+
+# Large binaries
+*.dmg

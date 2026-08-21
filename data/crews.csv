@@ -1,0 +1,9 @@
+crew_id,crew_name,capability,latitude,longitude,borough,status,current_workload,max_workload,shift_start,shift_end,vehicle
+CRW-A,Crew Alpha,TREE_REMOVAL,40.6602,-73.969,Brooklyn,AVAILABLE,0,4,06:00,22:00,Bucket Truck 12
+CRW-B,Crew Bravo,ROAD_REPAIR,40.742,-73.976,Manhattan,ON_JOB,3,4,06:00,22:00,Asphalt Truck 7
+CRW-C,Crew Charlie,ELECTRICAL,40.744,-73.928,Queens,AVAILABLE,0,4,06:00,22:00,Utility Van 3
+CRW-D,Crew Delta,GENERAL_MAINTENANCE,40.682,-73.974,Brooklyn,AVAILABLE,0,4,06:00,22:00,Flatbed 9
+CRW-E,Crew Echo,TREE_REMOVAL,40.8501,-73.8662,Bronx,OFF_SHIFT,0,4,22:00,06:00,Bucket Truck 15
+CRW-F,Crew Foxtrot,DRAINAGE,40.746,-73.891,Queens,ON_JOB,1,4,06:00,22:00,Vactor Truck 2
+CRW-G,Crew Golf,ROAD_REPAIR,40.678,-73.944,Brooklyn,AVAILABLE,0,4,06:00,22:00,Asphalt Truck 11
+CRW-H,Crew Hotel,SIGNAGE,40.608,-74.118,Staten Island,AVAILABLE,0,4,06:00,22:00,Utility Van 8

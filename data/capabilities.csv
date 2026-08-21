@@ -1,0 +1,7 @@
+capability_id,name,description,typical_crew_size
+TREE_REMOVAL,Tree Removal,Chainsaw/chipper crews for downed trees and large limbs,4
+ROAD_REPAIR,Road Repair,Asphalt and concrete crews for potholes and pavement hazards,3
+ELECTRICAL,Electrical,"Streetlight, traffic-signal and municipal electrical work",2
+DRAINAGE,Drainage,Sewer and storm-drain crews for flooding and blocked drains,3
+GENERAL_MAINTENANCE,General Maintenance,"Graffiti removal, debris clearing, minor repairs",2
+SIGNAGE,Signage,Street and traffic sign repair and replacement,2

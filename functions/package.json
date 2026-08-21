@@ -1,0 +1,15 @@
+{
+  "name": "nyc-311-dispatch-core",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Deterministic dispatch core for NYC 311 Crew Dispatch (portable into Foundry Functions)",
+  "scripts": {
+    "build": "tsc",
+    "test": "tsc && node --test dist/tests/",
+    "demo": "tsc && node dist/src/demo/demo.js"
+  },
+  "devDependencies": {
+    "@types/node": "^18.19.0",
+    "typescript": "^5.4.0"
+  }
+}

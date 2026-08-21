@@ -1,0 +1,6 @@
+request_id,received_at,channel,latitude,longitude,borough,description
+REQ-2002,2026-08-20T14:45:29-04:00,PHONE,40.6721,-73.955,Brooklyn,A whole tree just came down across Eastern Parkway by Classon Ave in the storm. Both lanes on this side are blocked and branches are on a parked car.
+REQ-2003,2026-08-20T14:45:29-04:00,APP,40.733,-73.87,Queens,Queens Blvd underpass at 65th is flooding fast. Water is up to the car doors and one sedan is stuck in the middle of it with people inside.
+REQ-2004,2026-08-20T14:46:29-04:00,PHONE,40.684,-73.977,Brooklyn,The traffic signal at Atlantic and Flatbush went completely dark in the storm. It's a six-way intersection and nobody knows who has the right of way.
+REQ-2005,2026-08-20T14:46:29-04:00,WEB,40.665,-73.989,Brooklyn,Wind blew a bunch of construction barriers and plywood across 4th Ave near 9th St. Drivers are getting out to drag them off the road.
+REQ-2006,2026-08-20T14:47:29-04:00,PHONE,40.635,-73.953,Brooklyn,A streetlight pole snapped on Ocean Ave near Farragut and it's leaning on the wires. There were sparks when it happened.
