@@ -1,4 +1,7 @@
-# As-built record (dev-tier instance: yawnner.usw-16.palantirfoundry.com)
+# As-built record
+
+Built against a Foundry developer-tier instance. Host and RIDs below are
+specific to that stack; set `FOUNDRY_HOST` to point the scripts at your own.
 
 ## Phase 1 — datasets (DONE, via REST API)
 Project: NYC 311 Crew Dispatch — ri.compass.main.folder.4589d949-4115-48eb-9c93-89a92f14b6b1

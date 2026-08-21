@@ -7,11 +7,22 @@ Reads the token from ~/.foundry-token and dataset RIDs from ./rids/*.rid.
 """
 
 import json
+import os
+import sys
 import urllib.request
 from pathlib import Path
 
-HOST = "https://yawnner.usw-16.palantirfoundry.com"
-TOKEN = Path("~/.foundry-token").expanduser().read_text().strip()
+# Point at your own stack, e.g.
+#   export FOUNDRY_HOST=https://<your-subdomain>.<region>.palantirfoundry.com
+HOST = os.environ.get("FOUNDRY_HOST", "").rstrip("/")
+if not HOST:
+    sys.exit("Set FOUNDRY_HOST, e.g. export FOUNDRY_HOST=https://acme.usw-1.palantirfoundry.com")
+
+TOKEN_FILE = Path(os.environ.get("FOUNDRY_TOKEN_FILE", "~/.foundry-token")).expanduser()
+if not TOKEN_FILE.exists():
+    sys.exit(f"No token at {TOKEN_FILE}. Create one in Foundry (Settings > Tokens) and save it there (chmod 600).")
+TOKEN = TOKEN_FILE.read_text().strip()
+
 RID_DIR = Path(__file__).parent / "rids"
 
 SCHEMAS = {
