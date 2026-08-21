@@ -38,7 +38,31 @@ Notes / gotchas:
 - Object types were created singular in intent but the wizard pluralizes the
   API name (Incidents/Crews/Assignments) — that's what code must reference.
 
-## Phase 3 — Custom actions: NEXT
-Still to build (the real workflow actions):
-  Assign Crew, Escalate Incident, Mark Duplicate, Defer, Resolve Incident
-  + links: Incident->Crew, Assignment->Incident, Assignment->Crew, Incident->Incident (duplicateOf)
+## Phase 3a — Links (DONE, via Ontology Manager UI)
+All four verified traversing real data via the objects/{id}/links/{link} API:
+
+  Incidents.crew              -> Crews        [ONE]   fk assignedCrewId = crewId
+  Incidents.assignments       -> Assignments  [MANY]  (reverse)
+  Incidents.originalIncident  -> Incidents    [ONE]   fk duplicateOf = incidentId
+  Incidents.duplicateReports  -> Incidents    [MANY]  (reverse, self-link)
+  Assignments.incident        -> Incidents    [ONE]
+  Assignments.crew            -> Crews        [ONE]
+  Crews.incidents             -> Incidents    [MANY]  (reverse)
+  Crews.assignments           -> Assignments  [MANY]  (reverse)
+
+Gotchas:
+- A link's API name may NOT collide with an existing property API name.
+  `duplicateOf` was rejected as Invalid because the property of that name
+  exists; renamed the link to originalIncident / duplicateReports.
+- Driving these dropdowns: plain clicks on list items are ignored. The working
+  pattern is: click the dropdown -> click its search input -> TYPE to filter
+  -> click the single remaining row. Synthetic JS click events are filtered
+  out by the app entirely.
+- "Save to ontology" opens a confirm popover that does not always appear in a
+  screenshot immediately; query the DOM for the portal instead of trusting a
+  stale capture.
+
+## Phase 3b — Custom actions: NEXT
+See ACTIONS_SPEC.md. Assign Crew and Resolve are multi-object and want
+function-backed actions, so the Functions repo (phase 4) comes first for those.
+Escalate / Mark Duplicate / Defer are simple property edits and can be built now.
