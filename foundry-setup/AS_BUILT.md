@@ -69,3 +69,42 @@ Gotchas:
 See ACTIONS_SPEC.md. Assign Crew and Resolve are multi-object and want
 function-backed actions, so the Functions repo (phase 4) comes first for those.
 Escalate / Mark Duplicate / Defer are simple property edits and can be built now.
+
+## Phase 5a — AIP Logic: Classify Incident (DONE, published)
+
+Resource: /Yawnner-d16e2c/NYC 311 Crew Dispatch/Classify Incident
+Type: EDDIE_LOGIC   rid: ri.eddie.main.logic.6737b36b-47a0-4648-b31c-245325876143
+Bound to: Yawnner Ontology     Status: Published
+
+Shape:
+  input   description : String (required)
+  block   Use LLM (GPT-5.6 Sol), ~1500-char system prompt carrying the
+          classification rules from aip/classify_incident.md
+  output  Struct{ incidentType: String, severity: String,
+                  requiredCapability: String }
+
+Verified preview run (3.93s), input = the Flatbush Ave fallen-tree report:
+  { "incidentType": "FALLEN_TREE",
+    "severity": "CRITICAL",
+    "requiredCapability": "TREE_REMOVAL" }
+
+Note the model returned CRITICAL rather than the FALLEN_TREE base of HIGH,
+because the report mentions a blocked lane and swerving traffic — the
+escalation rule in the system prompt working as intended.
+
+Deliberately NOT returned by the LLM: priorityScore. Priority stays
+deterministic (functions/src/dispatch/priority.ts).
+
+Reduced scope vs. the original spec: roadObstruction, safetyRisk,
+estimatedDurationMinutes, summary and reasoning were dropped from the struct.
+The struct editor popover in AIP Logic stops accepting input after ~3 fields,
+and the three kept fields are the ones that actually drive routing (type ->
+capability -> eligible crews, severity -> priority base). Duration falls back
+to the per-type default already in the code.
+
+Gotchas:
+- Publishing requires binding the function to an ontology first
+  (Publish -> Configuration -> "Bound to the following ontologies").
+- The task-prompt editor inserts a /variable chip at the caret and resists
+  programmatic clearing; the variable ended up before the instruction text.
+  Functionally fine (report then instruction) but worth tidying by hand.
