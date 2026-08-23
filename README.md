@@ -9,6 +9,25 @@ Ontology state.
 **The operational question:** *which crew should be dispatched to which
 incident next?*
 
+## Quickstart
+
+```bash
+cd functions && npm install
+npm run demo -- 1   # one request end to end: classify -> rank -> assign
+npm run demo -- 2   # storm: five reports at once, queue reprioritizes
+npm run demo -- 3   # duplicate detection
+node dist/tests/dispatch.test.js   # 18 tests, printed individually
+```
+
+Needs Node 18+ and Python 3. No API keys, no network.
+
+**Live in Palantir Foundry:** AIP Logic classification, a three-object
+Ontology with four links, an Ontology Action that changes operational state,
+and a Workshop dispatcher application. See
+[foundry-setup/AS_BUILT.md](foundry-setup/AS_BUILT.md) for exactly what was
+built and the platform gotchas hit along the way, and [DEMO.md](DEMO.md) for
+the demo script.
+
 ## Design philosophy — where AI is (and isn't) allowed
 
 | Concern | Mechanism | Why |
@@ -55,58 +74,34 @@ aip/                   AIP Logic specs: prompts + typed I/O contracts, paste-rea
 foundry-setup/         ordered build guide for the Foundry side
 ```
 
-The dispatch core is deliberately portable: in Foundry it's pasted into a
-Functions code repository unchanged, behind thin adapters that map Ontology
-objects to the plain interfaces in `types.ts`.
+The dispatch core is deliberately portable: it runs under `node --test` here
+and goes into a Foundry Functions repository unchanged (pushed over git to
+`/stemma/git/<repo-rid>`), behind thin adapters that map Ontology objects onto
+the plain interfaces in `types.ts`.
 
-## Run the local vertical slice
+## Demo script
 
-```bash
-cd data && python3 generate_data.py && cd ../functions
-npm install
-npm test          # 18 tests
-npm run demo -- 1 # Atlantic Ave pothole → classify → rank → assign
-npm run demo -- 2 # storm: 5 simultaneous reports → queue reprioritizes
-npm run demo -- 3 # second report of the Flatbush tree → duplicate flagged
-```
-
-## Demo script (< 4 minutes)
-
-**0:00 — The problem.** "NYC gets thousands of 311 reports a day as free text.
-Dispatchers must decide which crew goes where next." Show the command center:
-queue, map, metrics. Point at the CRITICAL fallen tree on Flatbush Ave, 4 min
-old, priority 92.
-
-**0:40 — Scenario 1: one request, end to end.** Paste the Atlantic Ave pothole
-report. AIP classifies it (POTHOLE, HIGH, road obstruction, safety risk) —
-show the reasoning. Deterministic code turns that into priority 73 and ranks
-crews: Golf 86/100 recommended; Bravo qualified but 35/100 — *carrying 3 open
-jobs*; four crews ineligible with explicit reasons. Click **Assign Crew** →
-incident goes ASSIGNED, Golf goes ON_JOB, an Assignment object exists. "The
-button edited the Ontology — that's the system of record, not a dashboard."
-
-**1:50 — Scenario 2: the storm.** Submit five reports in a row. Three arrive
-CRITICAL and jump above previously queued medium work — the queue reorders by
-the deterministic priority, and each recommendation explains itself (the
-drainage crew is already on a flood job, so new flood work queues or waits).
-
-**2:50 — Scenario 3: duplicate.** Submit the second Flatbush tree report. The
-geo/time/type pre-filter finds INC-1001 30 meters away; AIP compares the two
-texts and flags HIGH-confidence duplicate with a rationale. Click **Mark
-Duplicate** — no crew wasted, report preserved.
-
-**3:20 — Close on architecture.** One slide/breath: "LLM only where language is
-ambiguous — classification, duplicate confirmation, explanation. Everything
-that must be right — eligibility, ranking, priority — is deterministic,
-tested TypeScript. Every action is an Ontology edit a dispatcher chose to
-make. Impact: minutes shaved off dispatch on every hazard blocking a road."
+See [DEMO.md](DEMO.md) — a timed, four-minute script with the exact
+commands, the tabs to have open, and the claims to be careful about on
+camera.
 
 ## Status
 
-- [x] Synthetic data + scenario files
-- [x] Deterministic core (priority, eligibility, ranking, duplicate pre-filter) + 18 tests
-- [x] Local end-to-end vertical slice (mock classifier standing in for AIP)
-- [ ] Foundry: datasets → ontology → actions (foundry-setup/BUILD_GUIDE.md phases 1–3)
-- [ ] Foundry: Functions repo adapters (phase 4)
-- [ ] AIP Logic: classify / confirm-duplicate / explain (phase 5)
-- [ ] Workshop command center (phase 6)
+Local (all green):
+- [x] Synthetic data generator + three scenario files
+- [x] Deterministic core: priority, eligibility, ranking, duplicate pre-filter
+- [x] 18 tests, including the three demo narratives
+- [x] End-to-end vertical slice runner
+
+In Foundry:
+- [x] Datasets (4, typed) and Ontology (Incidents / Crews / Assignments)
+- [x] Four object links, verified traversing real data
+- [x] AIP Logic **Classify Incident** — published, ontology-bound, verified
+- [x] Ontology Action **Update Incident** — verified changing state via API
+- [x] Workshop application — published v0.3.0
+- [x] Functions repo: dispatch core + recommendCrews / assignCrew /
+      resolveIncident pushed over git
+- [ ] Functions: import object types via the Palantir sidebar so
+      `@ontology/sdk` resolves, then publish
+- [ ] AIP Logic: duplicate confirmation and operator explanation (specs
+      written in `aip/`)
