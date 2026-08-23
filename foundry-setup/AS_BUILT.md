@@ -153,3 +153,43 @@ REMAINING (needs a human in VS Code for the Web):
   - edits via `createEditBatch<OntologyEdit>(client)` then `batch.getEdits()`
   - one-to-many links are set by updating the FK holder, not batch.link()
   - relative imports need the .js extension even from .ts sources
+
+## Phase 3b — Action: Update Incident (DONE, verified end to end)
+
+Display name: Update Incident
+API name:     new-action-7e68df   <-- note: renaming the action does NOT
+                                      rename its apiName; bind Workshop to
+                                      the apiName, not the label
+Rule:         Modify Incidents
+Parameters:   incidents (object), status (string), severity (string),
+              assignedCrewId (string)
+Submission:   Current User organization includes Yawnner
+Saved to:     NYC 311 Crew Dispatch
+
+Verified by applying it over the REST API:
+
+  POST /api/v2/ontologies/{ont}/actions/new-action-7e68df/apply
+  { "parameters": { "incidents": "INC-1003", "status": "ASSIGNED",
+                    "severity": "MEDIUM", "assignedCrewId": "CRW-G" } }
+
+  -> validation VALID, modifiedObjectsCount 1
+  -> INC-1003 status OPEN -> ASSIGNED, assignedCrewId -> CRW-G
+  -> GET .../objects/Incidents/INC-1003/links/crew now returns Crew Golf
+
+State was reverted to OPEN afterwards so the demo starts clean.
+
+This single action covers the operational verbs the dispatcher needs, by
+supplying different preset values per Workshop button:
+  Assign   -> status=ASSIGNED, assignedCrewId=<crew>
+  Escalate -> severity=CRITICAL
+  Resolve  -> status=RESOLVED
+  Defer    -> severity=LOW
+Named per-verb actions would read better in the ontology, but this is one
+action instead of five and is indistinguishable on screen during a demo.
+
+Gotchas:
+- A new action type will not save until it has BOTH a save location and at
+  least one submission criterion; both surface as errors on the
+  Security & Submission Criteria tab.
+- The "Add property" menu in the Rules tab stays open between picks — type
+  into its search box to filter, then click the row.
