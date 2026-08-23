@@ -193,3 +193,37 @@ Gotchas:
   Security & Submission Criteria tab.
 - The "Add property" menu in the Rules tab stays open between picks — type
   into its search box to filter, then click the row.
+
+## Phase 6 — Workshop application (DONE, published v0.2.0)
+
+Module: NYC 311 Crew Dispatch  (file name in Workshop: "Incidents Inbox")
+rid:  ri.workshop.main.module.7e65cddb-fff0-4c16-b6f7-1d636740d6e3
+
+  edit view: /workspace/module/edit/<rid>
+  live view: /workspace/module/view/latest/<rid>     <-- use this to demo
+
+Built from the **Inbox template**, which is almost exactly the dispatcher
+layout: it ships with a Filter List, an Object Table, an Object View and a
+placeholder action-backed Button Group. Choosing it over "Blank module"
+saved a large amount of widget configuration.
+
+Wired:
+  Object Table  -> Incidents (live: INC-1001..1012 visible with addresses,
+                   boroughs, durations)
+  Object View   -> selected incident's full properties
+  Filter List   -> incident id / address / crew / borough / description /
+                   duplicate of / duration / type / lat / lon
+  Button        -> "Assign Crew", ON CLICK = Action -> Update Incident
+                   (the ontology action verified earlier)
+
+The template's default title is "Incidents Inbox"; the module file is named
+NYC 311 Crew Dispatch. Renaming the on-page header is a cosmetic edit in the
+header widget.
+
+Still worth adding if time allows (in rough value order):
+  1. Sort the Object Table by Priority Score descending — this is what makes
+     it read as an operational queue rather than a table.
+  2. A second button "Escalate" -> same action, severity=CRITICAL.
+  3. Metric cards for open / critical / available crews.
+  4. Map widget on the Incidents lat/lon.
+  5. Surface the AIP classification in the detail panel.
