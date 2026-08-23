@@ -108,3 +108,48 @@ Gotchas:
 - The task-prompt editor inserts a /variable chip at the caret and resists
   programmatic clearing; the variable ended up before the instruction text.
   Functionally fine (report then instruction) but worth tidying by hand.
+
+## Phase 4 — Functions repo (code pushed; ontology import outstanding)
+
+Repo: /Yawnner-d16e2c/NYC 311 Crew Dispatch/dispatch-functions
+Type: STEMMA_REPOSITORY  rid: ri.stemma.main.repository.9a833b05-ebfd-48be-aafc-83b321e1ec91
+Template: TypeScript Functions V2 (OSDK v2, @osdk/functions 1.20.0)
+
+*** The repo is a real git remote and accepts pushes: ***
+
+    git clone https://:$TOKEN@<host>/stemma/git/<repo-rid>
+
+That is by far the fastest way to get code in — no web editor required.
+`git ls-remote` against that URL returns master, and a normal `git push`
+works. Foundry picked the functions up immediately (they appear in the
+VS Code FUNCTIONS > Live preview list).
+
+Pushed (commit 423e80f):
+  src/dispatch/*            the deterministic core, copied verbatim except
+                            NodeNext .js import extensions and one fix for
+                            noUncheckedIndexedAccess in the shift parser
+  src/functions/recommendCrews.ts   read-only; returns ranked eligible crews
+                            with the score breakdown AND excluded crews with
+                            reasons
+  src/functions/assignCrew.ts       edit fn; Incident + Crew in one edit batch
+  src/functions/resolveIncident.ts  edit fn; closes incident, frees the crew
+
+REMAINING (needs a human in VS Code for the Web):
+  The object types must be imported via the Palantir "Resource imports"
+  sidebar so `@ontology/sdk` resolves — resources.json is still empty, which
+  is why PROBLEMS shows unresolved imports. AGENTS.md in the repo says this
+  step "most likely needs human intervention" and that matches what I hit:
+  VS Code runs in a cross-origin iframe, so neither DOM inspection nor
+  keyboard shortcuts (cmd+shift+P) reach it. Clicking blind by screenshot is
+  possible but unreliable.
+
+  To finish: open the repo in Foundry, Palantir sidebar -> resource imports,
+  add object types Incidents, Crews, Assignments, then Publish/Tag version.
+
+## API surface learned from the repo's own AGENTS.md (worth keeping)
+  - one registered function per file; default export; file name == fn name
+  - `client: Client` is always the first param when touching the Ontology
+  - `Osdk.Instance<T>` for objects, `ObjectSet<T>` for sets
+  - edits via `createEditBatch<OntologyEdit>(client)` then `batch.getEdits()`
+  - one-to-many links are set by updating the FK holder, not batch.link()
+  - relative imports need the .js extension even from .ts sources
