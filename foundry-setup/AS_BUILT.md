@@ -227,3 +227,27 @@ Still worth adding if time allows (in rough value order):
   3. Metric cards for open / critical / available crews.
   4. Map widget on the Incidents lat/lon.
   5. Surface the AIP classification in the detail panel.
+
+## Phase 6b — Workshop interactivity (v0.5.0)
+
+Added:
+- Metric card "Open Incidents" — object set aggregation (Count) over the
+  `Filtered Incidents` variable. Live value 35. Because it shares the filter
+  variable with the table, typing in the filter panel recounts the card.
+
+Attempted and removed: Map widget.
+  The Map object layer bound fine to Filtered Incidents (35 objects), but
+  "Zoom to fit all objects" returned "Unable to fly to selection on map" and
+  no pins rendered. Cause: the Incidents object type exposes `latitude` and
+  `longitude` as separate DOUBLE properties, and the Workshop map needs a
+  geopoint-typed property to plot. Fixing it properly means adding a
+  geopoint column to the backing dataset, re-applying the schema, adding the
+  property in Ontology Manager, and waiting for a reindex. An empty
+  world map is worse on camera than no map, so the widget was deleted.
+  This is the same caveat already flagged in BUILD_GUIDE.md phase 2.
+
+Driving note: the Workshop editor was automated through the user's own Brave
+browser via the Claude-in-Chrome extension. The in-app Browser pane could not
+be used because it has no platform authenticator
+(`PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable()` returns
+false), so Foundry's passkey login hangs forever there.
