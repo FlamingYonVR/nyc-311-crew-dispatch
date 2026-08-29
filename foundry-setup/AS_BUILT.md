@@ -251,3 +251,20 @@ browser via the Claude-in-Chrome extension. The in-app Browser pane could not
 be used because it has no platform authenticator
 (`PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable()` returns
 false), so Foundry's passkey login hangs forever there.
+
+## Phase 6c — Table columns trimmed (v0.7.0)
+
+Problem: the object table carried all 11 Incident properties (including
+Latitude, Longitude, Duplicate Of, Estimated Duration Minutes), so it ran
+underneath the floating property-list card and the Description column and
+everything right of it was unreadable.
+
+Fix: removed all columns and added back only the four a dispatcher reads:
+  Priority Score | Severity | Incident Type | Address
+
+Side benefit: the leftmost cell is now the deterministic priority score
+rather than an incident ID, so the queue visibly reads as ranked work.
+The Flatbush Ave fallen tree leads at 92 / CRITICAL.
+
+Note: changing the section LAYOUT DIRECTION from Rows to Columns did NOT
+fix the overlap — the column count was the actual cause.
