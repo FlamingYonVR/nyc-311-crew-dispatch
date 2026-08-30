@@ -98,7 +98,11 @@ In Foundry:
 - [x] Four object links, verified traversing real data
 - [x] AIP Logic **Classify Incident** — published, ontology-bound, verified
 - [x] Ontology Action **Update Incident** — verified changing state via API
-- [x] Workshop application — published v0.3.0
+- [x] Workshop application — published v0.7.0: priority-first incident queue
+      (Priority Score / Severity / Incident Type / Address), a live
+      "Open Incidents" metric backed by an object set aggregation that
+      recounts as the dispatcher filters, and an Assign Crew button wired
+      to the Update Incident action
 - [x] Functions repo: dispatch core + recommendCrews / assignCrew /
       resolveIncident pushed over git
 - [ ] Functions: import object types via the Palantir sidebar so
